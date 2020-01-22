@@ -1,10 +1,20 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from uuid import uuid4, UUID
 
 from common.db import get_client
 
 
 db = get_client()
+
+
+class HasId(BaseModel):
+    id: UUID
+
+    def __init__(self, **data):
+        if "_id" in data:
+            data["id"] = data["_id"]
+            del data["_id"]
+        super(HasId, self).__init__(**data)
 
 
 class BlueprintCreate(BaseModel):
@@ -22,5 +32,5 @@ class BlueprintCreate(BaseModel):
         return data
 
 
-class Blueprint(BlueprintCreate):
-    id: UUID
+class Blueprint(HasId, BlueprintCreate):
+    pass

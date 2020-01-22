@@ -14,9 +14,5 @@ def create_blueprint(bp: BlueprintCreate) -> Blueprint:
 
 
 def get_blueprint_list() -> List[Blueprint]:
-    items = list()
-    for bp in db.blueprints.find({}):
-        bp["id"] = bp["_id"]
-        items.append(Blueprint(**bp))
-
+    items = [Blueprint(**bp) for bp in db.blueprints.find({})]
     return items
