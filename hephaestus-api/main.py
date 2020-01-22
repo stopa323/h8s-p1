@@ -1,13 +1,15 @@
 import uvicorn
 from fastapi import FastAPI
 
+from common.config import get_config
+from router import blueprint
+
 app = FastAPI()
-
-
-@app.get("/")
-async def root():
-    return {"message": "Siema Heniu!"}
+app.include_router(blueprint.router, prefix="/v1/blueprints")
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # TODO: hook to on start events
+    cfg = get_config()
+    uvicorn.run(app, host=cfg.get("DEFAULT", "bind_host"),
+                port=cfg.getint("DEFAULT", "bind_port"))
