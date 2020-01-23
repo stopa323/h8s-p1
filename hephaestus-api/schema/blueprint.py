@@ -1,20 +1,11 @@
 from pydantic import BaseModel
-from uuid import uuid4, UUID
+from uuid import uuid4
 
 from common.db import get_client
+from schema.base import HasId
 
 
 db = get_client()
-
-
-class HasId(BaseModel):
-    id: UUID
-
-    def __init__(self, **data):
-        if "_id" in data:
-            data["id"] = data["_id"]
-            del data["_id"]
-        super(HasId, self).__init__(**data)
 
 
 class BlueprintCreate(BaseModel):

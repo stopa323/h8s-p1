@@ -5,7 +5,7 @@ from common.config import get_config
 from router import blueprint
 
 app = FastAPI()
-app.include_router(blueprint.router, prefix="/v1/blueprints")
+app.include_router(blueprint.router, prefix="/v1")
 
 
 if __name__ == "__main__":
