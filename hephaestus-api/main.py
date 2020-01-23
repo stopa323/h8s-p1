@@ -2,10 +2,11 @@ import uvicorn
 from fastapi import FastAPI
 
 from common.config import get_config
-from router import blueprint
+from router import blueprint, node_mold
 
 app = FastAPI()
 app.include_router(blueprint.router, prefix="/v1")
+app.include_router(node_mold.router, prefix="/v1")
 
 
 if __name__ == "__main__":
