@@ -8,7 +8,9 @@ from provider import node_mold
 router = APIRouter()
 
 
-@router.get("/nodeMolds", response_model=List[NodeMoldBase])
+@router.get("/nodes",
+            response_model=List[NodeMoldBase],
+            response_model_exclude={"id"})
 async def get_node_molds():
     items = node_mold.get_molds()
     return items

@@ -1,18 +1,14 @@
 from typing import List
 
-from common.db import get_client
-from schema import Blueprint, BlueprintCreate
+from model.blueprint import BlueprintDB, BlueprintDBPlugin
+from schema.blueprint import Blueprint
 
 
-db = get_client()
-
-
-def create_blueprint(bp: BlueprintCreate) -> Blueprint:
-    data = bp.save()
-    item = Blueprint(**data)
+def create_blueprint(bp: Blueprint) -> BlueprintDB:
+    item = BlueprintDBPlugin.create(bp)
     return item
 
 
-def get_blueprint_list() -> List[Blueprint]:
-    items = [Blueprint(**bp) for bp in db.blueprints.find({})]
+def get_blueprint_list() -> List[BlueprintDB]:
+    items = BlueprintDBPlugin.get_many()
     return items
