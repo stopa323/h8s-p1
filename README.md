@@ -1,2 +1,2 @@
-# hephaestus-api
-TOP SECRET
+# hephaestus-bp
+Manage blueprint document lifecycle
