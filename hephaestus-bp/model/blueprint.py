@@ -2,10 +2,11 @@ import uuid
 from typing import List
 
 from common.db import get_client
-from model.node import HNodeKind, NodeDB
+from model.node import NodeDB
 from provider.node import create_node
 from schema.base import HasId
 from schema.blueprint import Blueprint
+from schema.schemata import HNodeKind
 
 db = get_client()
 
@@ -24,8 +25,8 @@ class BlueprintDBPlugin:
         bp_id = db.blueprints.insert_one(data).inserted_id
         data["id"] = bp_id
 
-        ingress_node = create_node(HNodeKind.BP_INGRESS, bp_id)
-        egress_node = create_node(HNodeKind.BP_EGRESS, bp_id)
+        ingress_node = create_node(HNodeKind.BP_ENTRY, bp_id)
+        egress_node = create_node(HNodeKind.BP_EXIT, bp_id)
 
         data["nodes"] = [ingress_node, egress_node]
 

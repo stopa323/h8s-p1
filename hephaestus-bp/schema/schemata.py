@@ -1,5 +1,11 @@
+from enum import Enum
 from pydantic import BaseModel
 from typing import List
+
+
+class HNodeKind(Enum):
+    BP_ENTRY = "H.BPEntry"
+    BP_EXIT = "H.BPExit"
 
 
 class PortSchemata(BaseModel):
