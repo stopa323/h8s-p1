@@ -1,0 +1,19 @@
+---
+meta:
+
+nodes:
+  BlueprintEntryNode:
+    name: Blueprint Entry
+    kind: H.BPEntry
+    egressPorts:
+      - name: Entry
+        kind: exec
+        dataType: executionFlow
+
+  BlueprintExitNode:
+    name: Blueprint Exit
+    kind: H.BPExit
+    ingressPorts:
+      - name: Exit
+        kind: exec
+        dataType: executionFlow
