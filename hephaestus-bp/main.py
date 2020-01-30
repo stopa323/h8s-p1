@@ -3,11 +3,11 @@ from fastapi import FastAPI
 
 from common.config import get_config
 from common.db import load_core_schemata
-from router import blueprint, node_mold
+from router import blueprint, schemata
 
 app = FastAPI()
 app.include_router(blueprint.router, prefix="/v1")
-app.include_router(node_mold.router, prefix="/v1/molds")
+app.include_router(schemata.router, prefix="/v1")
 
 
 @app.on_event("startup")
