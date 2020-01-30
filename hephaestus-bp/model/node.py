@@ -1,5 +1,3 @@
-import uuid
-
 from common.db import get_client
 from provider.schemata import NodeSchemataDBPlugin
 from schema import base, schemata
@@ -9,7 +7,11 @@ db = get_client()
 
 
 class NodeDB(base.HasId, schemata.NodeSchemata):
-    blueprint_id: uuid.UUID
+    blueprint_id: str
+
+    @classmethod
+    def id_prefix(cls):
+        return "node"
 
 
 class NodeDBPlugin:
@@ -22,6 +24,8 @@ class NodeDBPlugin:
         data["blueprint_id"] = bp_id
 
         node = NodeDB(**data)
-        db.nodes.insert_one(node.dict())
+        ack = db.nodes.insert_one(node.dict()).acknowledged
+        if not ack:
+            raise RuntimeError(f"Could not create {kind} node")
 
         return node

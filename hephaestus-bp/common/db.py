@@ -1,6 +1,6 @@
 import logging
+import pymongo
 import yaml
-from pymongo import MongoClient
 
 from common.config import get_config
 from schema import schemata
@@ -12,13 +12,20 @@ CONF = get_config()
 DB = None
 
 
-def get_client() -> MongoClient:
+def get_client() -> pymongo.MongoClient:
     global DB
 
     if not DB:
-        DB = MongoClient(CONF.get("db", "connection"))
+        DB = pymongo.MongoClient(CONF.get("db", "connection"))
 
     return DB[CONF.get("db", "db_name")]
+
+
+def set_up_indexes():
+    db = get_client()
+    db.blueprints.create_index("id", unique=True)
+    db.nodes.create_index("id", unique=True)
+    db.node_schemata.create_index("kind", unique=True)
 
 
 def load_core_schemata():

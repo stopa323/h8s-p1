@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from common.config import get_config
-from common.db import load_core_schemata
+from common.db import load_core_schemata, set_up_indexes
 from router import blueprint, schemata
 
 app = FastAPI()
@@ -12,6 +12,7 @@ app.include_router(schemata.router, prefix="/v1")
 
 @app.on_event("startup")
 async def startup_event():
+    set_up_indexes()
     load_core_schemata()
 
 

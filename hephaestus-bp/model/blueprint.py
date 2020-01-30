@@ -14,29 +14,33 @@ db = get_client()
 class BlueprintDB(Blueprint, HasId):
     nodes: List[NodeDB] = []
 
+    @classmethod
+    def id_prefix(cls):
+        return "bp"
+
 
 class BlueprintDBPlugin:
 
     @classmethod
     def create(cls, bp: Blueprint) -> BlueprintDB:
-        data = bp.dict()
-        data["_id"] = uuid.uuid4()
+        db_obj = BlueprintDB(**bp.dict())
 
-        bp_id = db.blueprints.insert_one(data).inserted_id
-        data["id"] = bp_id
+        ack = db.blueprints.insert_one(db_obj.dict()).acknowledged
+        if not ack:
+            raise RuntimeError("Could not create blueprint")
 
-        ingress_node = create_node(HNodeKind.BP_ENTRY, bp_id)
-        egress_node = create_node(HNodeKind.BP_EXIT, bp_id)
+        ingress_node = create_node(HNodeKind.BP_ENTRY, db_obj.id)
+        egress_node = create_node(HNodeKind.BP_EXIT, db_obj.id)
 
-        data["nodes"] = [ingress_node, egress_node]
+        db_obj.nodes = [ingress_node, egress_node]
 
-        return BlueprintDB(**data)
+        return db_obj
 
     @classmethod
     def get_many(cls) -> List[BlueprintDB]:
         items = []
         for bp in db.blueprints.find({}):
-            n_docs = db.nodes.find({"blueprint_id": bp["_id"]})
+            n_docs = db.nodes.find({"blueprint_id": bp["id"]})
             nodes = [NodeDB(**n) for n in n_docs]
             bp["nodes"] = nodes
             items.append(BlueprintDB(**bp))
