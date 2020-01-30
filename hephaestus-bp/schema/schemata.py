@@ -6,6 +6,7 @@ class PortSchemata(BaseModel):
     name: str
     kind: str
     dataType: str
+    mandatory: bool
 
 
 class NodeSchemata(BaseModel):

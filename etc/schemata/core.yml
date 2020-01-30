@@ -9,6 +9,7 @@ nodes:
       - name: Entry
         kind: exec
         dataType: executionFlow
+        mandatory: true
 
   BlueprintExitNode:
     name: Blueprint Exit
@@ -17,3 +18,4 @@ nodes:
       - name: Exit
         kind: exec
         dataType: executionFlow
+        mandatory: true
