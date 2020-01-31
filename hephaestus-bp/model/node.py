@@ -1,7 +1,7 @@
 from common.db import get_client
 from provider.schemata import NodeSchemataDBPlugin
-from schema import base, schemata
-
+from schema import schemata
+from model import base
 
 db = get_client()
 

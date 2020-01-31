@@ -1,10 +1,9 @@
-import uuid
 from typing import List
 
 from common.db import get_client
 from model.node import NodeDB
 from provider.node import create_node
-from schema.base import HasId
+from model.base import HasId
 from schema.blueprint import Blueprint
 from schema.schemata import HNodeKind
 

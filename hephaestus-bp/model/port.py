@@ -1,4 +1,4 @@
-from schema.base import HasId
+from model.base import HasId
 
 
 class Port(HasId):
