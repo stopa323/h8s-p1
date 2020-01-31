@@ -1,5 +1,5 @@
 from model.node import NodeDB, NodeDBPlugin
-from schema.schemata import HNodeKind
+from model.schema import HNodeKind
 
 
 def create_node(kind: HNodeKind, bp_id: str) -> NodeDB:

@@ -2,12 +2,12 @@ import uvicorn
 from fastapi import FastAPI
 
 from common.config import get_config
-from common.db import load_core_schemata, set_up_indexes
-from router import blueprint, schemata
+from common.utils import set_up_indexes, load_core_schemata
+from router import blueprint, schema
 
 app = FastAPI()
 app.include_router(blueprint.router, prefix="/v1")
-app.include_router(schemata.router, prefix="/v1")
+app.include_router(schema.router, prefix="/v1")
 
 
 @app.on_event("startup")

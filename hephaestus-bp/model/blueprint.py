@@ -5,7 +5,7 @@ from common.db import get_client
 from model.node import NodeDB
 from provider.node import create_node
 from model.base import HasId
-from schema.schemata import HNodeKind
+from model.schema import HNodeKind
 
 db = get_client()
 

@@ -1,12 +1,11 @@
 from common.db import get_client
-from provider.schemata import NodeSchemataDBPlugin
-from schema import schemata
-from model import base
+from provider.schema import NodeSchemaPlugin
+from model import base, schema
 
 db = get_client()
 
 
-class NodeDB(base.HasId, schemata.NodeSchemata):
+class NodeDB(base.HasId, schema.NodeSchemaObj):
     blueprint_id: str
 
     @classmethod
@@ -17,8 +16,8 @@ class NodeDB(base.HasId, schemata.NodeSchemata):
 class NodeDBPlugin:
 
     @classmethod
-    def create(cls, kind: schemata.HNodeKind, bp_id: str) -> NodeDB:
-        schema = NodeSchemataDBPlugin.get(kind)
+    def create(cls, kind: schema.HNodeKind, bp_id: str) -> NodeDB:
+        schema = NodeSchemaPlugin.get(kind)
 
         data = schema.dict()
         data["blueprint_id"] = bp_id
