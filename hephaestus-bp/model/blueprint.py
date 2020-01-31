@@ -1,16 +1,21 @@
+from pydantic import BaseModel, Field
 from typing import List
 
 from common.db import get_client
 from model.node import NodeDB
 from provider.node import create_node
 from model.base import HasId
-from schema.blueprint import Blueprint
 from schema.schemata import HNodeKind
 
 db = get_client()
 
 
-class BlueprintDB(Blueprint, HasId):
+class BlueprintCreate(BaseModel):
+    name: str = Field(..., description="Name of the blueprint", min_length=1,
+                      max_length=50)
+
+
+class BlueprintObj(BlueprintCreate, HasId):
     nodes: List[NodeDB] = []
 
     @classmethod
@@ -18,11 +23,11 @@ class BlueprintDB(Blueprint, HasId):
         return "bp"
 
 
-class BlueprintDBPlugin:
+class BlueprintPlugin:
 
     @classmethod
-    def create(cls, bp: Blueprint) -> BlueprintDB:
-        db_obj = BlueprintDB(**bp.dict())
+    def create(cls, bp: BlueprintCreate) -> BlueprintObj:
+        db_obj = BlueprintObj(**bp.dict())
 
         ack = db.blueprints.insert_one(db_obj.dict()).acknowledged
         if not ack:
@@ -36,12 +41,12 @@ class BlueprintDBPlugin:
         return db_obj
 
     @classmethod
-    def get_many(cls) -> List[BlueprintDB]:
+    def get_many(cls) -> List[BlueprintObj]:
         items = []
         for bp in db.blueprints.find({}):
             n_docs = db.nodes.find({"blueprint_id": bp["id"]})
             nodes = [NodeDB(**n) for n in n_docs]
             bp["nodes"] = nodes
-            items.append(BlueprintDB(**bp))
+            items.append(BlueprintObj(**bp))
 
         return items

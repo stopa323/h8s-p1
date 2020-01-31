@@ -2,20 +2,19 @@ from fastapi import APIRouter
 from typing import List
 
 from provider import blueprint
-from schema.blueprint import Blueprint
-from model.blueprint import BlueprintDB
+from model.blueprint import BlueprintCreate, BlueprintObj
 
 
 router = APIRouter()
 
 
-@router.post("/blueprints", response_model=BlueprintDB)
-async def create_blueprint(bp: Blueprint):
+@router.post("/blueprints", response_model=BlueprintObj)
+async def create_blueprint(bp: BlueprintCreate):
     item = blueprint.create_blueprint(bp)
     return item
 
 
-@router.get("/blueprints", response_model=List[BlueprintDB])
+@router.get("/blueprints", response_model=List[BlueprintObj])
 async def get_blueprint_list():
     items = blueprint.get_blueprint_list()
     return items
