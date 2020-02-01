@@ -30,8 +30,9 @@ class NodeSchemaObj(BaseModel):
 class NodeSchemaPlugin:
 
     @classmethod
-    def get(cls, kind: HNodeKind) -> NodeSchemaObj:
-        item = db.node_schemata.find_one({"kind": kind.value})
+    def get(cls, kind: str) -> NodeSchemaObj:
+        item = db.node_schemata.find_one({"kind": kind})
+        # TODO: handle miss
         return NodeSchemaObj(**item)
 
     @classmethod

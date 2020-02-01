@@ -33,8 +33,8 @@ class BlueprintPlugin:
         if not ack:
             raise RuntimeError("Could not create blueprint")
 
-        ingress_node = create_node(HNodeKind.BP_ENTRY, db_obj.id)
-        egress_node = create_node(HNodeKind.BP_EXIT, db_obj.id)
+        ingress_node = create_node(HNodeKind.BP_ENTRY.value, db_obj.id)
+        egress_node = create_node(HNodeKind.BP_EXIT.value, db_obj.id)
 
         db_obj.nodes = [ingress_node, egress_node]
 

@@ -3,6 +3,7 @@ from typing import List
 
 from provider import blueprint
 from model.blueprint import BlueprintCreate, BlueprintObj
+from model.node import NodeDB
 
 
 router = APIRouter()
@@ -25,3 +26,12 @@ async def create_blueprint(bp: BlueprintCreate):
 async def get_blueprint_list():
     items = blueprint.get_blueprint_list()
     return items
+
+
+@router.post("/blueprints/{blueprint_id}/nodes",
+             response_model=NodeDB,
+             name="Add node to blueprint",
+             description="Creates new node inside blueprint document")
+async def add_node(node_kind: str, blueprint_id: str):
+    item = blueprint.add_node(node_kind, blueprint_id)
+    return item

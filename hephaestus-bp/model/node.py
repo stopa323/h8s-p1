@@ -16,7 +16,7 @@ class NodeDB(base.HasId, schema.NodeSchemaObj):
 class NodeDBPlugin:
 
     @classmethod
-    def create(cls, kind: schema.HNodeKind, bp_id: str) -> NodeDB:
+    def create(cls, kind: str, bp_id: str) -> NodeDB:
         schema = NodeSchemaPlugin.get(kind)
 
         data = schema.dict()
