@@ -1,4 +1,5 @@
 import logging
+import os
 import yaml
 
 from common.config import get_config
@@ -17,23 +18,36 @@ def set_up_indexes():
     db.node_schemata.create_index("kind", unique=True)
 
 
-def load_core_schemata():
-    LOG.info("Load core schemata")
-
-    path = CONF.get("schemata", "core")
+def load_schema_file(path: str) -> bool:
     with open(path) as f:
         data = yaml.safe_load(f)
 
     nodes = data.get("nodes")
     if not nodes:
-        LOG.error(f"Missing or empty `nodes` section in {path} file")
-        raise ValueError("Unable to load core schemata")
+        LOG.error(f"Skipping ({path}) - missing or empty `nodes` section")
+        return False
 
     if type(nodes) is not dict:
-        LOG.error(f"Expected dict in `nodes` section but {type(nodes)} found")
-        raise ValueError("Unable to load core schemata")
+        LOG.error(f"Skipping ({path}) - expected dict in `nodes` section but "
+                  f"{type(nodes)} found")
+        return False
 
     db = get_client()
     for _id, node in nodes.items():
         item = schema.NodeSchemaObj(**node)
         db.node_schemata.update({"kind": item.kind}, item.dict(), upsert=True)
+
+    return True
+
+
+def load_schemas() -> None:
+    schema_dir = CONF.get("schemata", "dir")
+    LOG.info(f"Scanning schema directory ({schema_dir}) for new schemas...")
+    schema_paths = []
+    for root, dirs, files in os.walk(schema_dir):
+        for f in files:
+            schema_paths.append(os.path.join(root, f))
+
+    for path in schema_paths:
+        if load_schema_file(path):
+            LOG.info(f"Loaded: {path}")

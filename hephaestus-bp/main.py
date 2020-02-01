@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from common.config import get_config
-from common.utils import set_up_indexes, load_core_schemata
+from common.utils import set_up_indexes, load_schemas
 from router import blueprint, schema
 
 app = FastAPI()
@@ -13,7 +13,7 @@ app.include_router(schema.router, prefix="/v1")
 @app.on_event("startup")
 async def startup_event():
     set_up_indexes()
-    load_core_schemata()
+    load_schemas()
 
 
 if __name__ == "__main__":
