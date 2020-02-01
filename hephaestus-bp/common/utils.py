@@ -34,6 +34,14 @@ def load_schema_file(path: str) -> bool:
 
     db = get_client()
     for _id, node in nodes.items():
+        # Inject slot number for each egress port
+        for slot in range(len(node.get("egressPorts", []))):
+            node["egressPorts"][slot]["slot"] = slot
+
+        # Inject slot number for each ingress port
+        for slot in range(len(node.get("ingressPorts", []))):
+            node["ingressPorts"][slot]["slot"] = slot
+
         item = schema.NodeSchemaObj(**node)
         db.node_schemata.update({"kind": item.kind}, item.dict(), upsert=True)
 

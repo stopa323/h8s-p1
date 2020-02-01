@@ -5,6 +5,7 @@ from common.db import get_client
 from model.node import NodeDB
 from provider.node import create_node
 from model.base import HasId
+from model.link import LinkObj
 from model.schema import HNodeKind
 
 db = get_client()
@@ -17,6 +18,7 @@ class BlueprintCreate(BaseModel):
 
 class BlueprintObj(BlueprintCreate, HasId):
     nodes: List[NodeDB] = []
+    links: List[LinkObj] = []
 
     @classmethod
     def id_prefix(cls):

@@ -14,6 +14,7 @@ class HNodeKind(Enum):
 
 
 class PortSchemaObj(BaseModel):
+    slot: int
     name: str
     kind: str
     dataType: str

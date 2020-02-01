@@ -17,9 +17,9 @@ class NodeDBPlugin:
 
     @classmethod
     def create(cls, kind: str, bp_id: str) -> NodeDB:
-        schema = NodeSchemaPlugin.get(kind)
+        node_schema = NodeSchemaPlugin.get(kind)
 
-        data = schema.dict()
+        data = node_schema.dict()
         data["blueprint_id"] = bp_id
 
         node = NodeDB(**data)
