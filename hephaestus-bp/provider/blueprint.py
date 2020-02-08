@@ -14,6 +14,10 @@ def get_blueprint_list() -> List[BlueprintObj]:
     return items
 
 
+def get_blueprint(_id: str) -> BlueprintObj:
+    pass
+
+
 def add_node(node_kind: str, blueprint_id: str) -> NodeDB:
     node = NodeDBPlugin.create(node_kind, blueprint_id)
     return node

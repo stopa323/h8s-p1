@@ -1,8 +1,9 @@
 from fastapi import APIRouter
 from typing import List
 
-from provider import blueprint
+from provider import blueprint, link as link_provider
 from model.blueprint import BlueprintCreate, BlueprintObj
+from model.link import LinkCreate, LinkObj
 from model.node import NodeDB
 
 
@@ -34,4 +35,13 @@ async def get_blueprint_list():
              description="Creates new node inside blueprint document")
 async def add_node(node_kind: str, blueprint_id: str):
     item = blueprint.add_node(node_kind, blueprint_id)
+    return item
+
+
+@router.post("/blueprints/{blueprint_id}/links",
+             response_model=LinkObj,
+             name="Add link to blueprint",
+             description="Creates link between two nodes")
+async def add_link(link: LinkCreate, blueprint_id: str):
+    item = link_provider.create_link(link, blueprint_id)
     return item

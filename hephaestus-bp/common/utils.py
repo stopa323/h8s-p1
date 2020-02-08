@@ -15,6 +15,7 @@ def set_up_indexes():
     db = get_client()
     db.blueprints.create_index("id", unique=True)
     db.nodes.create_index("id", unique=True)
+    db.links.create_index("id", unique=True)
     db.node_schemata.create_index("kind", unique=True)
 
 
