@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from typing import List
 
 from provider import schema
-from model.schema import NodeSchemaObj
+from obj.schema import NodeSchemaObj
 
 
 router = APIRouter()

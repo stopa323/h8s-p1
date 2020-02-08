@@ -1,6 +1,6 @@
 from typing import List
 
-from model.schema import NodeSchemaObj, NodeSchemaPlugin
+from obj.schema import NodeSchemaObj, NodeSchemaPlugin
 
 
 def get_nodes_schemata() -> List[NodeSchemaObj]:

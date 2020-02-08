@@ -4,7 +4,7 @@ import yaml
 
 from common.config import get_config
 from common.db import get_client
-from model import schema
+from obj import schema
 
 
 CONF = get_config()
