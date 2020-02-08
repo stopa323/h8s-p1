@@ -65,6 +65,13 @@ class NodeDBPlugin:
 
         return node
 
+    @classmethod
+    def delete(cls, blueprint_id: str, node_id: str):
+        res = db.nodes.delete_one({"id": node_id, "blueprint_id": blueprint_id})
+        if 0 == res.deleted_count:
+            raise RuntimeError(f"Could not find Node {node_id} within Blueprint"
+                               f" {blueprint_id}")
+
 
 class LinkDBPlugin:
 
@@ -81,6 +88,24 @@ class LinkDBPlugin:
             raise RuntimeError("Could not create link")
 
         return db_obj
+
+    @classmethod
+    def delete(cls, blueprint_id: str, link_id: str):
+        res = db.links.delete_one({"id": link_id, "blueprint_id": blueprint_id})
+        if 0 == res.deleted_count:
+            raise RuntimeError(f"Could not find Link {link_id} within Blueprint"
+                               f" {blueprint_id}")
+
+    @classmethod
+    def delete_by_node(cls, blueprint_id: str, node_id: str):
+        """Deletes all links associated with particular node."""
+        query = {"$and": [
+            {"blueprint_id": blueprint_id},
+            {"$or": [
+                {"sink.node_id": node_id},
+                {"source.node_id": node_id}]}]}
+        res = db.links.delete_many(query)
+        return res
 
 
 class BlueprintDBPlugin:

@@ -45,6 +45,14 @@ async def add_node(node_kind: str, blueprint_id: str):
     return item
 
 
+@router.delete("/blueprints/{blueprint_id}/nodes/{node_id}",
+               name="Remove node from blueprint",
+               description="Removes node and associated links from blueprint")
+async def delete_link(blueprint_id: str, node_id: str):
+    blueprint.delete_node(blueprint_id, node_id)
+    return {}
+
+
 @router.post("/blueprints/{blueprint_id}/links",
              response_model=obj.Link,
              name="Add link to blueprint",
@@ -52,3 +60,11 @@ async def add_node(node_kind: str, blueprint_id: str):
 async def add_link(link: obj.LinkCreate, blueprint_id: str):
     item = blueprint.add_link(link, blueprint_id)
     return item
+
+
+@router.delete("/blueprints/{blueprint_id}/links/{link_id}",
+               name="Remove link from blueprint",
+               description="Removes link between two nodes")
+async def delete_link(blueprint_id: str, link_id: str):
+    blueprint.delete_link(blueprint_id, link_id)
+    return {}
