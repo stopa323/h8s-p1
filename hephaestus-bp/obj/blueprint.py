@@ -3,13 +3,13 @@ from typing import List
 
 from common.db import get_client
 from obj.base import HasId
-from obj.schema import NodeSchemaObj
-from provider.schema import NodeSchemaPlugin
+from obj.mold import NodeMold
+from provider.mold import NodeMoldDBPlugin
 
 db = get_client()
 
 
-class Node(HasId, NodeSchemaObj):
+class Node(HasId, NodeMold):
     blueprint_id: str
 
     @classmethod
@@ -53,7 +53,7 @@ class NodeDBPlugin:
 
     @classmethod
     def create(cls, kind: str, bp_id: str) -> Node:
-        node_schema = NodeSchemaPlugin.get(kind)
+        node_schema = NodeMoldDBPlugin.get(kind)
 
         data = node_schema.dict()
         data["blueprint_id"] = bp_id

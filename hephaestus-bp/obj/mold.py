@@ -13,7 +13,7 @@ class HNodeKind(Enum):
     BP_EXIT = "H.BPExit"
 
 
-class PortSchemaObj(BaseModel):
+class PortMold(BaseModel):
     slot: int
     name: str
     kind: str
@@ -21,22 +21,22 @@ class PortSchemaObj(BaseModel):
     mandatory: bool
 
 
-class NodeSchemaObj(BaseModel):
+class NodeMold(BaseModel):
     name: str
     kind: str
-    ingressPorts: List[PortSchemaObj] = []
-    egressPorts: List[PortSchemaObj] = []
+    ingressPorts: List[PortMold] = []
+    egressPorts: List[PortMold] = []
 
 
-class NodeSchemaPlugin:
+class NodeMoldDBPlugin:
 
     @classmethod
-    def get(cls, kind: str) -> NodeSchemaObj:
+    def get(cls, kind: str) -> NodeMold:
         item = db.node_schemata.find_one({"kind": kind})
         # TODO: handle miss
-        return NodeSchemaObj(**item)
+        return NodeMold(**item)
 
     @classmethod
-    def get_all(cls) -> List[NodeSchemaObj]:
-        items = [NodeSchemaObj(**s) for s in db.node_schemata.find({})]
+    def get_all(cls) -> List[NodeMold]:
+        items = [NodeMold(**s) for s in db.node_schemata.find({})]
         return items

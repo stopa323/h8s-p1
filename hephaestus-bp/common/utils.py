@@ -4,7 +4,7 @@ import yaml
 
 from common.config import get_config
 from common.db import get_client
-from obj import schema
+from obj import mold
 
 
 CONF = get_config()
@@ -16,7 +16,7 @@ def set_up_indexes():
     db.blueprints.create_index("id", unique=True)
     db.nodes.create_index("id", unique=True)
     db.links.create_index("id", unique=True)
-    db.node_schemata.create_index("kind", unique=True)
+    db.node_molds.create_index("kind", unique=True)
 
 
 def load_schema_file(path: str) -> bool:
@@ -43,7 +43,7 @@ def load_schema_file(path: str) -> bool:
         for slot in range(len(node.get("ingressPorts", []))):
             node["ingressPorts"][slot]["slot"] = slot
 
-        item = schema.NodeSchemaObj(**node)
+        item = mold.NodeMold(**node)
         db.node_schemata.update({"kind": item.kind}, item.dict(), upsert=True)
 
     return True

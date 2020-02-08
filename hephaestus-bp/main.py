@@ -3,11 +3,11 @@ from fastapi import FastAPI
 
 from common.config import get_config
 from common.utils import set_up_indexes, load_schemas
-from router import blueprint, schema
+from router import blueprint, mold
 
 app = FastAPI()
 app.include_router(blueprint.router, prefix="/v1")
-app.include_router(schema.router, prefix="/v1")
+app.include_router(mold.router, prefix="/v1")
 
 
 @app.on_event("startup")
