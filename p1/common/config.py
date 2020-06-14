@@ -8,6 +8,6 @@ def get_config() -> configparser.ConfigParser:
 
     if not CONF:
         CONF = configparser.ConfigParser()
-        CONF.read("../etc/hephaestus.ini")
+        CONF.read("../etc/p1.ini")
 
     return CONF
