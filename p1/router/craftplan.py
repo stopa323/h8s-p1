@@ -1,6 +1,5 @@
 # type: ignore
 from fastapi import APIRouter
-from typing import List
 
 from p1.provider import craftplan as provider
 from p1.schema import craftplan as api
@@ -23,6 +22,7 @@ async def list_pancakes():
              name="Create Craftplan",
              description="Create new Craftplan document",
              response_model=api.CraftPlan,
+             status_code=201,
              tags=["Craftplan"])
 async def create_craftplan(craftplan: api.CraftPlanCreate):
     object = provider.create_craftplan(craftplan)

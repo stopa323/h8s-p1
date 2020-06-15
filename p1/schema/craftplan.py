@@ -4,7 +4,8 @@ from pydantic import BaseModel, Field
 
 class CraftPlanCreate(BaseModel):
     name: str = Field(...,
-                      title="Name your craftplan")
+                      title="Name your craftplan",
+                      min_length=3, max_length=32)
     description: str = Field("Place for your description",
                              title="Describe your craftplan briefly",
                              max_length=500)
