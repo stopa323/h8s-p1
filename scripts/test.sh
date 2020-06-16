@@ -4,4 +4,11 @@ set -e
 set -x
 
 bash ./scripts/lint.sh
-pytest --disable-warnings --cov=base --cov=tests --cov-report=term-missing tests/
+pytest --disable-warnings \
+       --verbose \
+       --cov=p1 \
+       --cov-branch \
+       --cov-report=term-missing \
+       --cov-fail-under=80 \
+       --no-cov-on-fail \
+       tests/
