@@ -45,7 +45,19 @@ class TestCreateEmptyCraftplan:
         assert [] == cp_db.nodes
 
 
-# def test_default_craftplan_description(mock_database):
-#     cp = schema.CraftPlanCreate(name="cp1")
-#     cp_db = provider.create_craftplan(cp)
-#     assert "Place for your description" == cp_db.description
+def test_default_craftplan_description(mock_database):
+    cp = schema.CraftPlanCreate(name="cp1")
+    cp_db = provider.create_craftplan(cp)
+    assert "Place for your description" == cp_db.description
+
+
+def test_craftplan_is_deleted_from_db(mock_database):
+    cp1 = db.CraftPlanObj(name="cp1")
+    cp1.save()
+    cp2 = db.CraftPlanObj(name="cp2")
+    cp2.save()
+
+    provider.delete_craftplan(cp1.id)
+
+    assert 1 == len(db.CraftPlanObj.objects)
+    assert cp2 == db.CraftPlanObj.objects[0]

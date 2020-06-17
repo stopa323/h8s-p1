@@ -3,6 +3,7 @@ import pytest
 from fastapi.testclient import TestClient
 from mongoengine import connect, disconnect
 
+from p1.db.craftplan import CraftPlanObj
 from p1.main import app
 
 
@@ -23,6 +24,20 @@ def fetch_craftplans(mock_database):
 @pytest.fixture(scope="class")
 def create_craftplan(request, mock_database):
     response = client.post(PATH, json=request.param)
+    return response
+
+
+@pytest.fixture(scope="class")
+def db_inject_craftplans(request, mock_database):
+    for idx, _id in enumerate(request.param):
+        CraftPlanObj(id="00000000-0000-0000-0000-000000000001",
+                     name=f"name-{idx}", description="desc-{idx}").save()
+
+
+@pytest.fixture(scope="class")
+def delete_craftplan(request):
+    url = f"{PATH}/{request.param}"
+    response = client.delete(url)
     return response
 
 
@@ -90,3 +105,29 @@ class TestCraftPlanListEmpty:
     def test_response_items_content_is_empty(self, fetch_craftplans):
         content = fetch_craftplans.json()
         assert [] == content["items"]
+
+
+@pytest.mark.parametrize(
+    "db_inject_craftplans,delete_craftplan,expected_status_code",
+    [
+        (["00000000-0000-0000-0000-000000000001"],
+         "00000000-0000-0000-0000-000000000001",
+         204),
+        (["00000000-0000-0000-0000-000000000001",
+          "00000000-0000-0000-0000-000000000002"],
+         "00000000-0000-0000-0000-000000000001",
+         204),
+        ([],
+         "ffffffff-ffff-ffff-ffff-ffffffffffff",
+         404),
+        (["00000000-0000-0000-0000-000000000001"],
+         "ffffffff-ffff-ffff-ffff-ffffffffffff",
+         404)
+    ],
+    indirect=["db_inject_craftplans", "delete_craftplan"]
+)
+class TestDeleteExistingCraftplan:
+
+    def test_response_status_is_correct(
+            self, db_inject_craftplans, delete_craftplan, expected_status_code):
+        assert expected_status_code == delete_craftplan.status_code

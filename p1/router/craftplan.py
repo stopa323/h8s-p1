@@ -27,3 +27,12 @@ async def list_pancakes():
 async def create_craftplan(craftplan: api.CraftPlanCreate):
     object = provider.create_craftplan(craftplan)
     return object
+
+
+@router.delete("/craftplans/{craftplan_id}",
+               name="Delete Craftplan",
+               description="Delete Craftplan document with all associated objects",
+               status_code=204,
+               tags=["Craftplan"])
+async def delete_craftplan(craftplan_id: str):
+    provider.delete_craftplan(craftplan_id)
